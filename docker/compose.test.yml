@@ -1,0 +1,42 @@
+name: segdev
+
+services:
+  app:
+    extends:
+      file: compose.yml
+      service: base-app
+    build:
+      args:
+        RAILS_ENV: test
+    env_file:
+      - ../.env.test
+    volumes:
+      - ..:/rails
+
+  db:
+    extends:
+      file: compose.yml
+      service: base-db
+    env_file:
+      - ../.env.test
+    volumes:
+      - ./init.dev.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - 3306:3306
+
+volumes:
+  db_data:
+  db_socket:
+  storage:
+
+secrets:
+  mysql_password:
+    file: secrets/test/mysql_password
+  mysql_root_password:
+    file: secrets/test/mysql_root_password
+  mysql_user:
+    file: secrets/test/mysql_user
+  rails_credentials:
+    file: ../config/credentials/test.yml.enc
+  rails_master_key:
+    file: ../config/credentials/test.key

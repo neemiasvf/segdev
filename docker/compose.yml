@@ -1,0 +1,32 @@
+name: segdev
+
+services:
+  base-app:
+    build:
+      context: ..
+      secrets:
+        - rails_credentials
+        - rails_master_key
+      args:
+        RUBY_VERSION: 3.3.3
+    image: segdev:latest
+    volumes:
+      - storage:/rails/storage:Z
+      - db_socket:/var/run/mysqld:z
+    secrets:
+      - rails_credentials
+      - rails_master_key
+  
+  base-db:
+    image: mysql:latest
+    volumes:
+      - db_data:/var/lib/mysql:Z
+      - db_socket:/var/run/mysqld:z
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
+      MYSQL_USER_FILE: /run/secrets/mysql_user
+      MYSQL_PASSWORD_FILE: /run/secrets/mysql_password
+    secrets:
+      - mysql_root_password
+      - mysql_user
+      - mysql_password

@@ -1,6 +1,7 @@
-require_relative "boot"
+# frozen_string_literal: true
 
-require "rails/all"
+require_relative 'boot'
+require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -17,7 +18,11 @@ module Segdev
     config.autoload_lib(ignore: %w(assets tasks))
 
     # Configuration for the application, engines, and railties goes here.
-    #
+    docker_secrets_path = ENV['DOCKER_SECRETS_PATH']
+    if File.exist? "#{docker_secrets_path}/rails_master_key"
+      config.credentials.key_path = "#{docker_secrets_path}/rails_master_key"
+    end
+
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
