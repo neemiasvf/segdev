@@ -13,7 +13,7 @@ FROM base AS dependencies
 
 # Install Homebrew dependencies (https://docs.brew.sh/Homebrew-on-Linux#requirements)
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential procps curl file git default-libmysqlclient-dev
+    apt-get install --no-install-recommends -y build-essential procps curl file git libpq-dev
 
 # Install Homebrew
 RUN NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"

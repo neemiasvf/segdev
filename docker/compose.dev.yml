@@ -10,8 +10,6 @@ services:
         RAILS_ENV: development
     env_file:
       - ../.env.development
-    volumes:
-      - ..:/rails
     ports:
       - 3000:3000
 
@@ -22,10 +20,9 @@ services:
     env_file:
       - ../.env.development
     volumes:
-      # - /var/run/mysqld:/var/run/mysqld # uncomment to make service available locally
-      - ./init.dev.sql:/docker-entrypoint-initdb.d/init.sql
+      # - /var/run/postgresql:/var/run/postgresql # uncomment to make service available locally
     ports:
-      - 3306:3306
+      - 5432:5432
 
 volumes:
   db_data:
@@ -33,12 +30,10 @@ volumes:
   storage:
 
 secrets:
-  mysql_password:
-    file: secrets/development/mysql_password
-  mysql_root_password:
-    file: secrets/development/mysql_root_password
-  mysql_user:
-    file: secrets/development/mysql_user
+  postgres_user:
+    file: secrets/development/postgres_user
+  postgres_password:
+    file: secrets/development/postgres_password
   rails_credentials:
     file: ../config/credentials/development.yml.enc
   rails_master_key:

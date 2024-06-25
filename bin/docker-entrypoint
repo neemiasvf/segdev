@@ -1,8 +1,17 @@
 #!/bin/bash -e
 
-# If running the rails server then create or migrate existing database
-if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
-  ./bin/rails db:prepare
+echo "Executing docker-entrypoint script..."
+
+# reference: https://github.com/vishnubob/wait-for-it
+echo "Waiting for db service to accept connections"
+./bin/wait-for-it db:5432
+
+# If running the rails server, create or migrate the existing database
+if [ "${1}" == "rails" ] && [ "${2}" == "server" ]; then
+  echo "Running 'rails db:prepare' ..."
+  rails db:prepare
 fi
 
-exec "${@}"
+# Execute the specified command
+echo "Executing specified command: $@"
+exec "$@"

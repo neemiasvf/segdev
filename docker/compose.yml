@@ -11,22 +11,21 @@ services:
         RUBY_VERSION: 3.3.3
     image: segdev:latest
     volumes:
+      - ..:/rails
+      - db_socket:/var/run/postgresql:z
       - storage:/rails/storage:Z
-      - db_socket:/var/run/mysqld:z
     secrets:
       - rails_credentials
       - rails_master_key
   
   base-db:
-    image: mysql:latest
+    image: postgres:latest
     volumes:
-      - db_data:/var/lib/mysql:Z
-      - db_socket:/var/run/mysqld:z
+      - db_data:/var/lib/postgresql/data:Z
+      - db_socket:/var/run/postgresql:z
     environment:
-      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
-      MYSQL_USER_FILE: /run/secrets/mysql_user
-      MYSQL_PASSWORD_FILE: /run/secrets/mysql_password
+      POSTGRES_USER_FILE: /run/secrets/postgres_user
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
     secrets:
-      - mysql_root_password
-      - mysql_user
-      - mysql_password
+      - postgres_user
+      - postgres_password

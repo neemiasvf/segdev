@@ -10,8 +10,6 @@ services:
         RAILS_ENV: test
     env_file:
       - ../.env.test
-    volumes:
-      - ..:/rails
 
   db:
     extends:
@@ -19,10 +17,6 @@ services:
       service: base-db
     env_file:
       - ../.env.test
-    volumes:
-      - ./init.dev.sql:/docker-entrypoint-initdb.d/init.sql
-    ports:
-      - 3306:3306
 
 volumes:
   db_data:
@@ -30,12 +24,10 @@ volumes:
   storage:
 
 secrets:
-  mysql_password:
-    file: secrets/test/mysql_password
-  mysql_root_password:
-    file: secrets/test/mysql_root_password
-  mysql_user:
-    file: secrets/test/mysql_user
+  postgres_user:
+    file: secrets/test/postgres_user
+  postgres_password:
+    file: secrets/test/postgres_password
   rails_credentials:
     file: ../config/credentials/test.yml.enc
   rails_master_key:
