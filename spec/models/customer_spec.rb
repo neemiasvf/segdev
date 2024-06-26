@@ -24,6 +24,7 @@ RSpec.describe Customer, type: :model do
   it { should have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 
   it { should have_one(:house).dependent(:destroy).inverse_of(:customer) }
+  it { should have_one(:risk_profile).dependent(:destroy).inverse_of(:riskable) }
   it { should have_one(:vehicle).dependent(:destroy).inverse_of(:customer) }
 
   it { should validate_presence_of :age }

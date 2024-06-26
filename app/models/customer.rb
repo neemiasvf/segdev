@@ -14,6 +14,7 @@
 #
 class Customer < ApplicationRecord
   has_one :house, dependent: :destroy, inverse_of: :customer
+  has_one :risk_profile, dependent: :destroy, as: :riskable, inverse_of: :riskable
   has_one :vehicle, dependent: :destroy, inverse_of: :customer
 
   validates :age, :dependents, :income, :marital_status, presence: true

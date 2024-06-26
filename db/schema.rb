@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 20_240_625_205_812) do
+ActiveRecord::Schema[7.1].define(version: 20_240_626_181_039) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'plpgsql'
 
@@ -31,6 +31,24 @@ ActiveRecord::Schema[7.1].define(version: 20_240_625_205_812) do
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
     t.index ['customer_id'], name: 'index_houses_on_customer_id', unique: true
+  end
+
+  create_table 'risk_profiles', force: :cascade do |t|
+    t.string 'riskable_type', null: false
+    t.bigint 'riskable_id', null: false
+    t.integer 'auto', null: false
+    t.integer 'auto_score', null: false
+    t.integer 'base_score', null: false
+    t.integer 'disability', null: false
+    t.integer 'disability_score', null: false
+    t.integer 'home', null: false
+    t.integer 'home_score', null: false
+    t.integer 'life', null: false
+    t.integer 'life_score', null: false
+    t.boolean 'risk_questions', null: false, array: true
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index %w[riskable_type riskable_id], name: 'index_risk_profiles_on_riskable', unique: true
   end
 
   create_table 'vehicles', force: :cascade do |t|
