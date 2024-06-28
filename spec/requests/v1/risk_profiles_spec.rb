@@ -84,15 +84,11 @@ RSpec.describe 'V1::RiskProfiles', type: :request do
                         'Dependents must be greater than or equal to 0'
       end
 
-      pending "house's ownership status"
-
       context 'income' do
         let(:customer) { build(:customer, :with_risk_profile, income: -1) }
         it_behaves_like 'a response with a specific error', 422, 'Unprocessable Content',
                         'Income must be greater than or equal to 0'
       end
-
-      pending 'marital status'
 
       context 'risk questions' do
         let(:risk_profile) { build(:risk_profile, risk_questions: %i[no yes no]) }
