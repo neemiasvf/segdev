@@ -1,0 +1,203 @@
+openapi: 3.1.0
+x-stoplight:
+  id: oo1b7wetodrw0
+info:
+  title: Segdev
+  version: '1.0'
+  description: |-
+    Segdev is a focused application created for Segdev's coding challenge #2.
+
+    It calculates the risk profile for different insurance lines (auto, disability, home, and life) based on the customer's information.
+
+    See [Segdev's challenge #2](https://github.com/segdev-tecnologia/vagas/blob/main/backend/desafio2/README.md) for more details.
+  contact:
+    name: Neemias Freitas
+    url: 'https://neemiasvf.dev'
+    email: me@neemiasvf.dev
+servers:
+  - url: 'http://localhost:3000'
+    description: localhost
+paths:
+  /v1/risk_profiles/calculate_for_customer:
+    post:
+      summary: Calculate Risk Profile for Customer
+      operationId: post-v1-risk_profiles-calculate-for-customer
+      responses:
+        '200':
+          $ref: '#/components/responses/risk_profile_for_customer'
+      description: |
+        Calculates the risk profile for different insurance lines (auto, disability, home, and life) based on the customer's information.
+      parameters:
+        - $ref: '#/components/parameters/Accept'
+        - $ref: '#/components/parameters/Content-Type'
+      requestBody:
+        $ref: '#/components/requestBodies/risk_profile_for_customer'
+      tags:
+        - risk_profile
+        - customer
+components:
+  schemas:
+    House:
+      type: object
+      x-examples:
+        Example 1:
+          ownership_status: owned
+      properties:
+        ownership_status:
+          type: string
+          enum:
+            - owned
+            - rented
+      required:
+        - ownership_status
+    Vehicle:
+      type: object
+      x-examples:
+        Example 1:
+          year: 2018
+      properties:
+        year:
+          type: integer
+          description: year of manufacture of the vehicle
+      required:
+        - year
+    RequestRiskProfileForCustomer:
+      type: object
+      x-stoplight:
+        id: xkcrq06axsu01
+      x-examples:
+        Example 1:
+          age: 35
+          dependents: 2
+          house:
+            ownership_status: owned
+          income: 0
+          marital_status: married
+          risk_questions:
+            - 0
+            - 1
+            - 0
+          vehicle:
+            year: 2018
+      properties:
+        age:
+          type: integer
+          description: customer's age
+        dependents:
+          type: integer
+          description: customer's number of dependents
+        house:
+          $ref: '#/components/schemas/House'
+          description: 'customer''s house, if any'
+        income:
+          type: integer
+          description: customer's income
+        marital_status:
+          type: string
+          description: customer's marital status
+          enum:
+            - single
+            - married
+        risk_questions:
+          type: array
+          description: customer's answers for risk questions
+          items:
+            type: integer
+            enum:
+              - 0
+              - 1
+        vehicle:
+          $ref: '#/components/schemas/Vehicle'
+          description: 'customer''s vehicle, if any'
+      required:
+        - age
+        - dependents
+        - income
+        - marital_status
+        - risk_questions
+      title: Request Risk Profile for Customer
+      description: request payload for calculating the risk profile of a customer
+    ResponseRiskProfileForCustomer:
+      type: object
+      x-examples:
+        Example 1:
+          auto: padrao
+          disability: inelegivel
+          home: economico
+          life: padrao
+      title: Response Risk Profile for Customer
+      description: response payload of a calculated risk profile of a customer
+      properties:
+        auto:
+          type: string
+          enum:
+            - inelegivel
+            - economico
+            - padrao
+            - avancado
+          description: risk score tier for auto insurance
+        disability:
+          type: string
+          description: risk score tier for disability insurance
+          enum:
+            - inelegivel
+            - economico
+            - padrao
+            - avancado
+        home:
+          type: string
+          description: risk score tier for home insurance
+          enum:
+            - inelegivel
+            - economico
+            - padrao
+            - avancado
+        life:
+          type: string
+          description: risk score tier for life insurance
+          enum:
+            - inelegivel
+            - economico
+            - padrao
+            - avancado
+      required:
+        - auto
+        - disability
+        - home
+        - life
+  securitySchemes: {}
+  requestBodies:
+    risk_profile_for_customer:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RequestRiskProfileForCustomer'
+            description: request payload
+      description: request payload for calculating the risk profile of a customer
+  responses:
+    risk_profile_for_customer:
+      description: response payload of a calculated risk profile of a customer
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseRiskProfileForCustomer'
+            description: response payload
+      headers: {}
+  parameters:
+    Accept:
+      name: Accept
+      in: header
+      required: false
+      schema:
+        type: string
+    Content-Type:
+      name: Content-Type
+      in: header
+      required: false
+      schema:
+        type: string
+  examples: {}
+security: []
+tags:
+  - name: customer
+  - name: risk_profile
