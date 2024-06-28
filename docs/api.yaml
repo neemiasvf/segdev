@@ -14,6 +14,9 @@ info:
     name: Neemias Freitas
     url: 'https://neemiasvf.dev'
     email: me@neemiasvf.dev
+  license:
+    identifier: MIT
+    name: MIT
 servers:
   - url: 'http://localhost:3000'
     description: localhost
@@ -33,8 +36,7 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/risk_profile_for_customer'
       tags:
-        - risk_profile
-        - customer
+        - risk_profiles
 components:
   schemas:
     House:
@@ -42,12 +44,14 @@ components:
       x-examples:
         Example 1:
           ownership_status: owned
+      description: 'Contains information about the customer''s house. This attribute can be null if the customer does not own a house. If provided, it includes the ownership status of the house.'
       properties:
         ownership_status:
           type: string
           enum:
             - owned
             - rented
+          description: Indicates the ownership status of the customer's house. Acceptable values are "owned" or "rented". This attribute is used to determine the risk profile for home and disability insurance.
       required:
         - ownership_status
     Vehicle:
@@ -55,10 +59,11 @@ components:
       x-examples:
         Example 1:
           year: 2018
+      description: 'Contains information about the customer''s vehicle. This attribute can be null if the customer does not own a vehicle. If provided, it includes the manufacturing year of the vehicle.'
       properties:
         year:
           type: integer
-          description: year of manufacture of the vehicle
+          description: Represents the manufacturing year of the vehicle. This attribute must be a valid four-digit less than or equal to the current year. The vehicle's age affects the risk profile for auto insurance.
       required:
         - year
     RequestRiskProfileForCustomer:
@@ -79,28 +84,35 @@ components:
             - 0
           vehicle:
             year: 2018
+      title: Request Risk Profile for Customer
+      description: request payload for calculating the risk profile of a customer
       properties:
         age:
           type: integer
-          description: customer's age
+          description: Represents the age of the customer. This attribute must be a non-negative integer. The age is used to determine the risk profile for various insurance lines.
+          minimum: 0
+          example: 35
         dependents:
           type: integer
-          description: customer's number of dependents
+          description: 'Indicates the number of dependents the customer has. This attribute must be a non-negative integer and is used to assess the customer''s risk profile, especially for life and disability insurance.'
+          minimum: 0
+          example: 2
         house:
           $ref: '#/components/schemas/House'
-          description: 'customer''s house, if any'
         income:
           type: integer
-          description: customer's income
+          description: Represents the customer's annual income in monetary units. This attribute must be a non-negative integer. The income level can affect the risk assessment for all insurance lines.
+          example: 0
         marital_status:
           type: string
-          description: customer's marital status
+          description: 'Describes the marital status of the customer. Acceptable values are "single" or "married". This attribute influences the risk profile for certain insurance lines, such as life and disability insurance.'
           enum:
             - single
             - married
+          example: married
         risk_questions:
           type: array
-          description: customer's answers for risk questions
+          description: An array containing answers to three risk-related questions. Each answer is a binary integer (0 or 1). The total sum of these values forms the base score used in the risk assessment process.
           items:
             type: integer
             enum:
@@ -108,15 +120,25 @@ components:
               - 1
         vehicle:
           $ref: '#/components/schemas/Vehicle'
-          description: 'customer''s vehicle, if any'
       required:
         - age
         - dependents
         - income
         - marital_status
         - risk_questions
-      title: Request Risk Profile for Customer
-      description: request payload for calculating the risk profile of a customer
+      examples:
+        - age: 35
+          dependents: 2
+          house:
+            ownership_status: owned
+          income: 0
+          marital_status: married
+          risk_questions:
+            - 0
+            - 1
+            - 0
+          vehicle:
+            year: 2018
     ResponseRiskProfileForCustomer:
       type: object
       x-examples:
@@ -165,6 +187,11 @@ components:
         - disability
         - home
         - life
+      examples:
+        - auto: padrao
+          disability: inelegivel
+          home: economico
+          life: padrao
   securitySchemes: {}
   requestBodies:
     risk_profile_for_customer:
@@ -173,6 +200,21 @@ components:
           schema:
             $ref: '#/components/schemas/RequestRiskProfileForCustomer'
             description: request payload
+          examples:
+            Example 1:
+              value:
+                age: 35
+                dependents: 2
+                house:
+                  ownership_status: owned
+                income: 0
+                marital_status: married
+                risk_questions:
+                  - 0
+                  - 1
+                  - 0
+                vehicle:
+                  year: 2018
       description: request payload for calculating the risk profile of a customer
   responses:
     risk_profile_for_customer:
@@ -180,24 +222,50 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ResponseRiskProfileForCustomer'
-            description: response payload
+            type: object
+            x-examples:
+              Example 1:
+                risk_profile:
+                  auto: inelegivel
+                  disability: inelegivel
+                  home: inelegivel
+                  life: inelegivel
+            properties:
+              risk_profile:
+                $ref: '#/components/schemas/ResponseRiskProfileForCustomer'
+                description: the JSON root key containing the calculated risk profile
+            required:
+              - risk_profile
+          examples:
+            Example 1:
+              value:
+                risk_profile:
+                  auto: padrao
+                  disability: inelegivel
+                  home: economico
+                  life: padrao
       headers: {}
   parameters:
     Accept:
       name: Accept
       in: header
-      required: false
       schema:
         type: string
+        default: application/json
+        enum:
+          - application/json
+      description: The `Accept` header specifies the media types that the client can accept in the response.
     Content-Type:
       name: Content-Type
       in: header
-      required: false
       schema:
         type: string
+        default: application/json
+        enum:
+          - application/json
+      description: The `Content-Type` header specifies the media type of the request payload or response body.
   examples: {}
 security: []
 tags:
-  - name: customer
-  - name: risk_profile
+  - name: risk_profiles
+    description: Operations related to calculating and managing risk profiles
