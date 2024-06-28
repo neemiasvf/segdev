@@ -172,4 +172,4 @@ docker compose -f docker/compose.test.yml run app rspec
 
 ## API Documentation
 
-The API documentation is located at `docs/api.yml`.
+The API documentation is located at `docs/api.yml` and published at [Stoplight](https://neemiasvf.stoplight.io/docs/segdev) and [SwaggerHub](https://app.swaggerhub.com/apis-docs/neemiasvf/segdev/1.0).
