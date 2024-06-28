@@ -127,8 +127,10 @@ The application is configured to automatically annotate certain kinds of files. 
 To run the application locally, make sure you have:
 
 - the same Ruby version and gemset from `.ruby-version` and `.ruby-gemset`, respectively.
+- `libpq-dev` (Postgres C API library), required to compile the `pg` gem.
 - a PostgreSQL instance up and running with the same credentials from the credentials file.
-- `libpq-dev` (Postgres C API library), required to compile the `pg` gem
+  - alternatively, you can run `docker compose -f docker/compose.dev.yml up db -d` to have Docker initialize ONLY the database instance.
+  - in `docker/compose.dev.yml`, uncomment the line that exposes PostgreSQL socket to the host.
 
 Then you can:
 
