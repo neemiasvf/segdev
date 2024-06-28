@@ -1,0 +1,71 @@
+{
+	"info": {
+		"_postman_id": "d3afe523-1f74-4b44-be55-b0e2cb04c363",
+		"name": "segdev",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10825860"
+	},
+	"item": [
+		{
+			"name": "Calculate Risk Profile for Customer",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"age\": 35,\r\n    \"dependents\": 2,\r\n    \"house\": {\r\n        \"ownership_status\": \"owned\"\r\n    },\r\n    \"income\": 0,\r\n    \"marital_status\": \"married\",\r\n    \"risk_questions\": [\r\n        0,\r\n        1,\r\n        0\r\n    ],\r\n    \"vehicle\": {\r\n        \"year\": 2018\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/v1/risk_profiles/calculate_for_customer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"v1",
+						"risk_profiles",
+						"calculate_for_customer"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
