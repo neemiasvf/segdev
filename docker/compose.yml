@@ -11,12 +11,13 @@ services:
         RUBY_VERSION: 3.3.3
     image: segdev:latest
     volumes:
-      - ..:/rails
+      # - ..:/rails # uncomment to mount local files into the container, making them live
       - db_socket:/var/run/postgresql:z
       - storage:/rails/storage:Z
     secrets:
       - rails_credentials
       - rails_master_key
+    depends_on: db
   
   base-db:
     image: postgres:latest

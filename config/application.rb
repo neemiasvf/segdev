@@ -18,9 +18,13 @@ module Segdev
     config.autoload_lib(ignore: %w[assets tasks])
 
     # Configuration for the application, engines, and railties goes here.
+    # Sets Docker Secrets path. Make sure these files are present and valid.
     docker_secrets_path = ENV['DOCKER_SECRETS_PATH']
     if File.exist? "#{docker_secrets_path}/rails_master_key"
       config.credentials.key_path = "#{docker_secrets_path}/rails_master_key"
+    end
+    if File.exist? "#{docker_secrets_path}/rails_credentials"
+      config.credentials.content_path = "#{docker_secrets_path}/rails_credentials"
     end
 
     # These settings can be overridden in specific environments using the files

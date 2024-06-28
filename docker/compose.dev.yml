@@ -20,7 +20,7 @@ services:
     env_file:
       - ../.env.development
     volumes:
-      # - /var/run/postgresql:/var/run/postgresql # uncomment to make service available locally
+      # - /var/run/postgresql:/var/run/postgresql # uncomment to expose PostgreSQL socket to the host
     ports:
       - 5432:5432
 
