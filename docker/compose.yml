@@ -9,7 +9,7 @@ services:
         - rails_master_key
       args:
         RUBY_VERSION: 3.3.3
-    image: segdev:latest
+    image: neemiasvf/segdev:latest
     volumes:
       # - ..:/rails # uncomment to mount local files into the container, making them live
       - db_socket:/var/run/postgresql:z
